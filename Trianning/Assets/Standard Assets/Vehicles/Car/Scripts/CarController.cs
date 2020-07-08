@@ -54,7 +54,11 @@ namespace UnityStandardAssets.Vehicles.Car
         public float MaxSpeed{get { return m_Topspeed; }}
         public float Revs { get; private set; }
         public float AccelInput { get; private set; }
-
+        //新增尾灯变量
+        public GameObject leftLight;
+        public GameObject rightLight;
+        private Light leftLightColor;
+        private Light rightLightColor;
         // Use this for initialization
         private void Start()
         {
@@ -69,6 +73,9 @@ namespace UnityStandardAssets.Vehicles.Car
 
             m_Rigidbody = GetComponent<Rigidbody>();
             m_CurrentTorque = m_FullTorqueOverAllWheels - (m_TractionControl*m_FullTorqueOverAllWheels);
+            //获取灯光组件
+            leftLightColor=leftLight.GetComponent<Light>();
+            rightLightColor=rightLight.GetComponent<Light>();
         }
 
 
@@ -142,7 +149,17 @@ namespace UnityStandardAssets.Vehicles.Car
             AccelInput = accel = Mathf.Clamp(accel, 0, 1);
             BrakeInput = footbrake = -1*Mathf.Clamp(footbrake, -1, 0);
             handbrake = Mathf.Clamp(handbrake, 0, 1);
-
+            //刹车点亮尾灯,尾灯变黄
+            if(BrakeInput >0f)
+            {
+	leftLightColor.color=Color.red;
+                rightLightColor.color=Color.red;
+             }
+             else
+            {
+	leftLightColor.color=Color.yellow;
+                rightLightColor.color=Color.yellow;
+             }
             //Set the steer on the front wheels.
             //Assuming that wheels 0 and 1 are the front wheels.
             m_SteerAngle = steering*m_MaximumSteerAngle;

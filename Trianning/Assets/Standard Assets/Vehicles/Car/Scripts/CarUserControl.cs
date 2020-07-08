@@ -8,14 +8,36 @@ namespace UnityStandardAssets.Vehicles.Car
     public class CarUserControl : MonoBehaviour
     {
         private CarController m_Car; // the car controller we want to use
-
+        //控制摄像机
+        private GameObject firstCamera,thirdCamera;
+        private bool isFirstPersonView=false;
 
         private void Awake()
         {
             // get the car controller
             m_Car = GetComponent<CarController>();
+            //获取第一，第三人称视角
+            firstCamera=GameObject.Find("FirstCamera");
+            thirdCamera=GameObject.Find("ThirdCamera");
         }
-
+        //新建Update方法实现切换视角
+       private void Update()
+       {
+	if(Input.GetKeyDown(KeyCode.V))
+                {
+	  isFirstPersonView= ! isFirstPersonView;
+                }
+                if(isFirstPersonView)
+                {
+	   firstCamera.SetActive(true);
+                   thirdCamera.SetActive(false);
+                }
+	else
+                {
+	    firstCamera.SetActive(false);
+                   thirdCamera.SetActive(true);
+                }
+       }
 
         private void FixedUpdate()
         {
