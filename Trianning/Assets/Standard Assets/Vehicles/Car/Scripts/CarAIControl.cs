@@ -44,7 +44,31 @@ namespace UnityStandardAssets.Vehicles.Car
         private float m_AvoidOtherCarSlowdown;    // how much to slow down due to colliding with another car, whilst avoiding
         private float m_AvoidPathOffset;          // direction (-1 or 1) in which to offset path to avoid other car, whilst avoiding
         private Rigidbody m_Rigidbody;
-
+        //添加路点属性
+        private GameObject[] poss =new GameObject[47];
+        private int nextPos=0;
+        //初始化路点
+        void Start()
+        {
+           GetPoss();
+         }
+        private void GetPoss()
+        {
+           int a=101;
+           while(a<148)
+           {
+              GameObject g=GameObject.Find("poss"+a);
+               if(g !=null)
+               {
+	poss[a-101]=g;
+                a++; 
+               }
+	else
+	{
+	   break;
+	}
+           }
+        }
 
         private void Awake()
         {
@@ -64,7 +88,16 @@ namespace UnityStandardAssets.Vehicles.Car
             {
                 // Car should not be moving,
                 // use handbrake to stop
-                m_CarController.Move(0, 0, -1f, 1f);
+	//如果路点数小于最大路点数执行操作
+	if(nextPos<48)
+	{
+	  SetTarget(poss[nextPos].transform);
+	   nextPos++;
+	}
+	else
+	{
+	  m_CarController.Move(0, 0, -1f, 1f);
+	}
             }
             else
             {
